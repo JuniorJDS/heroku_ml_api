@@ -27,4 +27,4 @@ def clear():
 
     df = pd.read_csv("data/raw/census.csv", skipinitialspace=True)
     df = clean_dataset(df)
-    df.to_csv("data/cleaned/census_cleaned.csv", index=False)
+    df.to_csv("data/cleaned/census.csv", index=False)
