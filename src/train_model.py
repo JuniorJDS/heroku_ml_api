@@ -26,6 +26,7 @@ def execute_train_test_model():
         train, categorical_features=cat_features, label="salary", training=True
     )
 
+
     # train and save model
     trained_model = train_model(X_train, y_train)
 

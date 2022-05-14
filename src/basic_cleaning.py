@@ -5,7 +5,6 @@ Author: Junior J
 """
 import pandas as pd
 import numpy as np
-# from sklearn.preprocessing import LabelEncoder
 
 
 def clean_dataset(df: pd.DataFrame):
@@ -15,8 +14,8 @@ def clean_dataset(df: pd.DataFrame):
     df.replace({'?':np.nan},inplace=True)
     df.dropna(inplace=True)
 
-    # df['salary'] = LabelEncoder().fit_transform((df['salary']))
     df.drop("fnlgt", axis="columns", inplace=True)
+    df.drop("education-num", axis=1, inplace=True)
     df.drop("capital-gain", axis="columns", inplace=True)
     df.drop("capital-loss", axis="columns", inplace=True)
 
