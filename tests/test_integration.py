@@ -8,6 +8,7 @@ def client():
     client = TestClient(app)
     return client
 
+
 def test_status_check__get_status_of_api__expected_200(client):
 
     request = client.get("/")
@@ -15,6 +16,7 @@ def test_status_check__get_status_of_api__expected_200(client):
     assert request.status_code == 200
     expected = {"message": "Welcome to the ML Heroku API"}
     assert request.json() == expected
+
 
 def test_post_inference__post_a_valid_data__expected_200(client):
 

@@ -1,5 +1,4 @@
 import pandas as pd
-import pytest
 from src.basic_cleaning import clean_dataset
 
 

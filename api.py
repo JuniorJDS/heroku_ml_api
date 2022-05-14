@@ -26,7 +26,6 @@ async def status_check():
 @app.post("/")
 async def post_inference(user_data: ModelInput):
 
-
     model = load("data/model/model.joblib")
     encoder = load("data/model/encoder.joblib")
     lb = load("data/model/lb.joblib")
@@ -70,8 +69,8 @@ async def post_inference(user_data: ModelInput):
     X, _, _, _ = process_data(
                 df,
                 categorical_features=cat_features,
-                encoder=encoder, 
-                lb=lb, 
+                encoder=encoder,
+                lb=lb,
                 training=False
     )
 
