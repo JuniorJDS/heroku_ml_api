@@ -11,7 +11,7 @@ def clean_dataset(df: pd.DataFrame):
 
     df = pd.read_csv("data/raw/census.csv", skipinitialspace=True)
 
-    df.replace({'?':np.nan},inplace=True)
+    df.replace({'?': np.nan}, inplace=True)
     df.dropna(inplace=True)
 
     df.drop("fnlgt", axis="columns", inplace=True)

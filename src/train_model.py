@@ -7,7 +7,7 @@ from src.ml.model import train_model
 
 
 def execute_train_test_model():
-    
+
     df = pd.read_csv("data/cleaned/census.csv")
     train, _ = train_test_split(df, test_size=0.20)
 
@@ -26,11 +26,9 @@ def execute_train_test_model():
         train, categorical_features=cat_features, label="salary", training=True
     )
 
-
     # train and save model
     trained_model = train_model(X_train, y_train)
 
     dump(trained_model, "data/model/model.joblib")
     dump(encoder, "data/model/encoder.joblib")
     dump(lb, "data/model/lb.joblib")
-
