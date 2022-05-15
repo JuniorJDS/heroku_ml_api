@@ -53,5 +53,5 @@ def test_post_inference__post_a_second_valid_data__expected_200(client):
     })
 
     assert request.status_code == 200
-    # modificar
+    # modifica
     # assert request.json() == {"prediction": ">50K"}
