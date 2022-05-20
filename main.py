@@ -1,46 +1,80 @@
-import argparse
-import logging
-
-from src.basic_cleaning import clear
-from src.train_model import execute_train_test_model
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
-logger = logging.getLogger()
-
-
-def go(args):
-
-    if args.step_name == "all_steps" or args.step_name == "clear_data":
-        logging.info("Cleaning data ...")
-        clear()
-        logging.info("Dataset has been cleaned!")
-
-    if args.step_name == "all_steps" or args.step_name == "train_test_model":
-        logging.info("Training and testing model ...")
-        execute_train_test_model()
-        logger.info("Training and testing done!")
-
-    if args.step_name == "all_steps" or args.step_name == "check_score":
-        logging.info("Checking the Score...")
+import os
+from fastapi import FastAPI
+from schema import ModelInput
+from joblib import load
+import numpy as np
+import pandas as pd
+from src.ml.data import process_data
+from src.ml.model import inference
 
 
-if __name__ == "__main__":
+if "DYNO" in os.environ and os.path.isdir(".dvc"):
+    os.system("dvc config core.no_scm true")
+    if os.system("dvc pull") != 0:
+        exit("dvc pull failed")
+    os.system("rm -r .dvc .apt/usr/lib/dvc")
 
-    parser = argparse.ArgumentParser(
-        description="ML Pipeline"
+
+app = FastAPI()
+
+
+@app.get("/")
+async def status_check():
+    return {"message": "Welcome to the ML Heroku API"}
+
+
+@app.post("/")
+async def post_inference(user_data: ModelInput):
+
+    model = load("data/model/model.joblib")
+    encoder = load("data/model/encoder.joblib")
+    lb = load("data/model/lb.joblib")
+
+    array = np.array([[
+                     user_data.age,
+                     user_data.workclass,
+                     user_data.education,
+                     user_data.maritalStatus,
+                     user_data.occupation,
+                     user_data.relationship,
+                     user_data.race,
+                     user_data.sex,
+                     user_data.hoursPerWeek,
+                     user_data.nativeCountry
+                     ]])
+    df = pd.DataFrame(data=array, columns=[
+        "age",
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "hours-per-week",
+        "native-country",
+    ])
+
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+
+    X, _, _, _ = process_data(
+                df,
+                categorical_features=cat_features,
+                encoder=encoder,
+                lb=lb,
+                training=False
     )
-    parser.add_argument(
-        "--step_name",
-        type=str,
-        choices=[
-            "clear_data",
-            "train_test_model",
-            "check_score",
-            "all_steps"
-        ],
-        default="all_steps"
-    )
 
-    args = parser.parse_args()
+    pred = inference(model, X)
+    y = lb.inverse_transform(pred)[0]
 
-    go(args)
+    return {"prediction": y}
