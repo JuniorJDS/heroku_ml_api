@@ -1,7 +1,7 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
 import logging
 
@@ -24,7 +24,7 @@ def train_model(X_train, y_train):
     """
 
     cv = KFold(n_splits=10, shuffle=True, random_state=1)
-    model = RandomForestClassifier(max_depth=2)
+    model = GradientBoostingClassifier(n_estimators=100)
     model.fit(X_train, y_train)
 
     scores = cross_val_score(
