@@ -40,7 +40,7 @@ def test_post_inference__post_a_valid_data__expected_200(client):
 def test_post_inference__post_a_second_valid_data__expected_200(client):
 
     request = client.post("/", json={
-        "age": 30,
+        "age": 32,
         "workclass": "Private",
         "education": "Some-college",
         "maritalStatus": "Married-civ-spouse",
@@ -48,10 +48,8 @@ def test_post_inference__post_a_second_valid_data__expected_200(client):
         "relationship": "Husband",
         "race": "White",
         "sex": "Male",
-        "hoursPerWeek": 100,
+        "hoursPerWeek": 80,
         "nativeCountry": "United-States"
     })
-
     assert request.status_code == 200
-    # modifica
-    # assert request.json() == {"prediction": ">50K"}
+    assert request.json() == {"prediction": ">50K"}

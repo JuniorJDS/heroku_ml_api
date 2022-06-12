@@ -3,6 +3,7 @@ import logging
 
 from src.basic_cleaning import clear
 from src.train_model import execute_train_test_model
+from src.check_model import execute_check_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -22,6 +23,8 @@ def go(args):
 
     if args.step_name == "all_steps" or args.step_name == "check_score":
         logging.info("Checking the Score...")
+        execute_check_model()
+        logging.info("Checking the Score done!")
 
 
 if __name__ == "__main__":
