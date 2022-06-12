@@ -18,6 +18,12 @@ def test_status_check__get_status_of_api__expected_200(client):
     assert request.json() == expected
 
 
+def test_status_check__get_wrong_url__expected_error(client):
+
+    request = client.get("/wrong-url")
+    assert request.status_code != 200
+
+
 def test_post_inference__post_a_valid_data__expected_200(client):
 
     request = client.post("/", json={
